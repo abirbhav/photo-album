@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Smart Search Photo Album</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdn.shoelace.style/1.0.0-beta24/shoelace.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <script type="text/javascript" src="js/apiGateway/lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="js/apiGateway/lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="js/apiGateway/apigClient.js"></script>
+
+</head>
+
+<body>
+    <div class="container" style="max-width: 720px; margin-top: 10px;">
+        <div class= "header">
+        <h1>Smart Search Photo Album</h1>
+        </div>
+        <hr/>
+
+        <div id="error" class="isa_error"></div>
+
+        <div class="input-group">
+            <input id="note-textarea" type="text" class="form-control" placeholder="Search photos" name="search">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit" onclick="searchPhoto()"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="input-group-btn">
+                <button class="btn btn-default" onclick="searchFromVoice()"><i class="fa fa-microphone"></i></button>
+            </div>
+            <div class="input-group-btn">
+                <button id="openModal" class="btn btn-default"><i class="fa fa-upload"></i></button>
+            </div>
+        </div>
+
+        <div id="myModal" class="modal">
+            <div class="container modal-content">
+                <span class="close">&times;</span>
+                <div class="col-md-8 offset-md-2 mt-5 mb-5">
+                    <h3 class="text-center">Upload a new photo</h3>
+                    <div class="row">
+                        <div class="col">
+                            <img id="preview" style="width: 250px; height: 250px;"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <br>
+                            <input style="padding-left:100px" type="file" accept="image/*" onchange="loadFile(event)" class="form-control-file" id="file_path" >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <br>
+                            <input id="image-labels" type="text" class="form-control" placeholder="Specify custom labels">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-success mt-2" type="submit" onclick="uploadPhoto()">UPLOAD</button>
+                        </div>
+                    </div>
+                    
+                    <p id ="uploadText"></p>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+    <div>
+        <div class="banner-section" id="img-container" style="padding: 1%;">
+            <p id="displaytext"></p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/upload_search.js"></script>
+    <script src="dist/main.js"></script>
+    <script>
+        var modal = document.getElementById("myModal");
+        
+        var btn = document.getElementById("openModal");
+        
+        var span = document.getElementsByClassName("close")[0];
+        
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+        
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+        var loadFile = function(event) {
+            var output = document.getElementById('preview');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+        </script>
+        
+</body>
+
+</html>
