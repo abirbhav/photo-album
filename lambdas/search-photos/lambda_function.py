@@ -21,7 +21,6 @@ OPEN_SEARCH_USERNAME = os.environ['OPEN_SEARCH_USERNAME']
 OPEN_SEARCH_PASSWORD = os.environ['OPEN_SEARCH_PASSWORD']
 
 def disambiguate(search_query):
-    logger.info(f'search query is {search_query}')
     lex = boto3.client('lex-runtime')
     
     # sending request to lex
