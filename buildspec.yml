@@ -30,6 +30,6 @@ phases:
       - cd ../search-photos
       - aws lambda update-function-code --function-name search-photos --zip-file fileb://deployment_package2.zip
       - echo "Updating files in the S3 bucket..."
-      - cd ..
+      - cd ../..
       - aws s3 sync frontend/. s3://b1cloudbucket --delete
       - echo "DONE"
