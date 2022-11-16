@@ -3,9 +3,9 @@ import logging
 import os
 import boto3
 import requests
-#import inflect
+import inflect
 
-#p = inflect.engine()
+p = inflect.engine()
 
 
 logger = logging.getLogger()
@@ -40,12 +40,12 @@ def disambiguate(search_query):
     
     return slots
 
-# def handlePlurals(slots):
-#     for i in range(len(slots)):
-#         try:
-#             slots[i] = (p.singular_noun(slots[i])).lower()
-#         except Exception:
-#             pass
+def handlePlurals(slots):
+    for i in range(len(slots)):
+        try:
+            slots[i] = (p.singular_noun(slots[i])).lower()
+        except Exception:
+            pass
     
 def search_in_open_search(slots):
     photos = []
@@ -91,7 +91,7 @@ def lambda_handler(event, context):
     slots = disambiguate(query_string)
     
     #Step 2: Handle plurals
-    #handlePlurals(slots)
+    handlePlurals(slots)
     
     #Step 3: Search keywords in elastic search
     photos = search_in_open_search(slots) if len(slots) > 0 else []
