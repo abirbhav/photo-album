@@ -31,10 +31,11 @@ def gets3MetaData(bucket_name, img_name):
     response = s3.head_object(Bucket=bucket_name, Key=img_name)
     logger.info(f'Response from s3: {response}')
     httpHeadersObj = response['ResponseMetadata']['HTTPHeaders']
+    logger.info(f'httpHeadersObj is {httpHeadersObj}')
     cutomLabelsMeta = []
-    if 'x-amz-meta-customLabels' in httpHeadersObj:
-        #TODO Test this
-        cutomLabelsMeta = httpHeadersObj['x-amz-meta-customLabels'].split(",")
+    if 'x-amz-meta-customlabels' in httpHeadersObj:
+        logger.info('I am here and labels are {httpHeadersObj["x-amz-meta-customlabels"]}')
+        cutomLabelsMeta = httpHeadersObj['x-amz-meta-customlabels'].split(",")
     return cutomLabelsMeta
     
 def createJson(bucket_name, img_name, labels, time_stamp):
@@ -53,7 +54,7 @@ def upload_to_opensearch(jsonObj):
     OPEN_SEARCH_USERNAME = os.environ['OPEN_SEARCH_USERNAME']
     OPEN_SEARCH_PASSWORD = os.environ['OPEN_SEARCH_PASSWORD']
     
-    url = OPEN_SEARCH_URL + '/' + OPEN_SEARCH_INDEX + '/_doc/1/'
+    url = OPEN_SEARCH_URL + '/' + OPEN_SEARCH_INDEX + '/_doc'
     
     response = requests.post(url, auth=(OPEN_SEARCH_USERNAME, OPEN_SEARCH_PASSWORD), json = jsonObj)
     logger.info(f'Response from opensearch: {response.text}')
@@ -70,6 +71,7 @@ def lambda_handler(event, context):
     logger.info(f'labels extracted are: {labels_rekognition}')
     
     labels_s3 = gets3MetaData(bucket_name, img_name)
+    logger.info(f'custom labels are: {labels_s3}')
     
     jsonObj = createJson(bucket_name, img_name, labels_rekognition + labels_s3, event_time)
     print(f'jsonObj is {jsonObj}')

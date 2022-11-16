@@ -83,22 +83,22 @@ def search_in_open_search(slots):
 def lambda_handler(event, context):
     logger.info(f'event is {event}')
     
-    query_string = event['queryStringParameters']
-    logger.info(f'query parmas is {query_string}')
+    query_string = event['queryStringParameters']['q']
+    logger.info(f'query string is {query_string}')
     
  
     #Step 1: Disambiguate the query
     slots = disambiguate(query_string)
     
     #Step 2: Handle plurals
-    handlePlurals(slots)
+    #handlePlurals(slots)
     
     #Step 3: Search keywords in elastic search
-    #photos = search_in_open_search(slots) if len(slots) > 0 else []
+    photos = search_in_open_search(slots) if len(slots) > 0 else []
     
     #Step 4: Return
     #print(photos)
-    photos = ['https://b2cloudbucket.s3.amazonaws.com/person.jpeg']
+    #photos = ['https://b2cloudbucket.s3.amazonaws.com/person.jpeg']
    
     
 
