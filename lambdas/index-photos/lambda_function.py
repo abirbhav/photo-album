@@ -77,6 +77,7 @@ def lambda_handler(event, context):
     print(f'jsonObj is {jsonObj}')
     upload_to_opensearch(jsonObj)
     
+    logger.info('code pipeline test')
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
